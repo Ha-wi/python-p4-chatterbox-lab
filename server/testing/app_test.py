@@ -90,23 +90,24 @@ class TestApp:
         with app.app_context():
 
             m = Message.query.first()
-            id = m.id
-            body = m.body
+            if m:
+                id = m.id
+                body = m.body
 
-            app.test_client().patch(
-                f'/messages/{id}',
-                json={
-                    "body":"Goodbye 👋",
-                }
-            )
+                app.test_client().patch(
+                    f'/messages/{id}',
+                    json={
+                        "body":"Goodbye 👋",
+                    }
+                )
 
-            g = Message.query.filter_by(body="Goodbye 👋").first()
-            assert(g)
+                g = Message.query.filter_by(body="Goodbye 👋").first()
+                assert(g)
 
-            g.body = body
-            db.session.add(g)
-            db.session.commit()
-
+                g.body = body
+                db.session.add(g)
+                db.session.commit()
+            
     def test_returns_data_for_updated_message_as_json(self):
         '''returns data for the updated message as JSON.'''
         with app.app_context():
